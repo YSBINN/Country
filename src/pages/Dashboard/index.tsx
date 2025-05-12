@@ -6,7 +6,7 @@ import CountryComparison from './components/CountryComparison';
 
 const Dashboard: React.FC = () => {
   const { data: countries, isLoading, error } = useAllCountries();
-  const { isComparisonMode, selectedCountries, toggleComparisonMode } = useCountryStore();
+  const { isComparisonMode,  toggleComparisonMode } = useCountryStore();
 
   return (
     <div className="min-h-screen bg-gray-50 w-[1280px] mx-auto">
@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
 
-        {isComparisonMode && selectedCountries.length > 0 && (
+        {isComparisonMode &&  (
           <CountryComparison />
         )}
 
