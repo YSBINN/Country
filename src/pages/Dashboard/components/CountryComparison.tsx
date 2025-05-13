@@ -1,57 +1,59 @@
-import React from 'react';
-import { useCountryStore } from '../../../shared/store/countryStore';
-import { Country, Currency } from '../../../shared/types';
+import React from "react";
+import { useCountryStore } from "../../../shared/store/countryStore";
+import { Country, Currency } from "../../../shared/types";
 
 const Metrics = [
   {
-    label: 'Population',
+    label: "Population",
     getValue: (country: Country) => country.population.toLocaleString(),
   },
   {
-    label: 'Area',
+    label: "Area",
     getValue: (country: Country) => `${country.area.toLocaleString()} km²`,
   },
   {
-    label: 'Region',
+    label: "Region",
     getValue: (country: Country) => country.region,
   },
   {
-    label: 'Subregion',
+    label: "Subregion",
     getValue: (country: Country) => country.subregion,
   },
   {
-    label: 'Languages',
-    getValue: (country: Country) => Object.values(country.languages).join(', '),
+    label: "Languages",
+    getValue: (country: Country) => Object.values(country.languages).join(", "),
   },
   {
-    label: 'Currencies',
-    getValue: (country: Country) => 
+    label: "Currencies",
+    getValue: (country: Country) =>
       Object.entries(country.currencies)
-        .map(([_, currency]: [string, Currency]) => `${currency.name} (${currency.symbol})`)
-        .join(', '),
+        .map(
+          ([_, currency]: [string, Currency]) =>
+            `${currency.name} (${currency.symbol})`
+        )
+        .join(", "),
   },
   {
-    label: 'Capital',
-    getValue: (country: Country) => country.capital?.join(', '),
+    label: "Capital",
+    getValue: (country: Country) => country.capital?.join(", "),
   },
   {
-    label: 'Timezones',
-    getValue: (country: Country) => country.timezones.join(', '),
+    label: "Timezones",
+    getValue: (country: Country) => country.timezones.join(", "),
   },
 ];
 
 const CountryComparison: React.FC = () => {
-  const { selectedCountries, removeFromComparison, clearComparison } = useCountryStore();
+  const { selectedCountries, removeFromComparison, clearComparison } =
+    useCountryStore();
 
   if (selectedCountries.length === 0) {
     return (
       <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-        <p className="text-blue-800">Select countries to compare</p>
+        <p className="text-blue-800">비교할 국가를 선택해 주세요.</p>
       </div>
     );
   }
-
-
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-10">
@@ -65,22 +67,30 @@ const CountryComparison: React.FC = () => {
         </button>
       </div>
       <div className="overflow-x-auto">
-      <table className="w-full">
+        <table className="w-full table-auto">
+          <colgroup>
+            <col span={5} className="w-1/6" />
+          </colgroup>
           <thead>
             <tr className="border-b">
-              <th className="py-2 px-4 text-left">Country</th>
+              <th className="py-2 px-4"></th>
               {selectedCountries.map((country: Country) => (
-                <th key={country.cca3} className="py-2 px-4 text-left">
-                  <div className="flex items-center gap-2">
+                <th
+                  key={country.cca3}
+                  className="py-2 px-4 text-right whitespace-nowrap"
+                >
+                  <div className="flex justify-end items-center gap-1">
                     <img
                       src={country.flags.png}
-                      alt={country.flags.alt || `Flag of ${country.name.common}`}
+                      alt={
+                        country.flags.alt || `Flag of ${country.name.common}`
+                      }
                       className="w-6 h-4 object-cover rounded"
                     />
                     <span>{country.name.common}</span>
                     <button
                       onClick={() => removeFromComparison(country)}
-                      className="ml-2 text-red-500 hover:text-red-600"
+                      className=" text-red-500 hover:text-red-600"
                     >
                       ×
                     </button>
@@ -89,20 +99,27 @@ const CountryComparison: React.FC = () => {
               ))}
             </tr>
           </thead>
-          <tbody>{Metrics.map((metric) => (
-      <tr key={metric.label} className="border-b">
-        <td className="py-2 px-4 font-medium text-left">{metric.label}</td>
-        {selectedCountries.map((country: Country) => (
-          <td key={country.cca3} className="py-2 px-4 text-left">
-            {metric.getValue(country)}
-          </td>
-        ))}
-      </tr>
-    ))}</tbody>
+          <tbody>
+            {Metrics.map(metric => (
+              <tr key={metric.label} className="border-b">
+                <th
+                  scope="low"
+                  className="w-[140px] py-2 px-4 text-left border-r"
+                >
+                  {metric.label}
+                </th>
+                {selectedCountries.map((country: Country) => (
+                  <td key={country.cca3} className="py-2 px-4 text-right">
+                    {metric.getValue(country)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
   );
 };
 
-export default CountryComparison; 
+export default CountryComparison;
